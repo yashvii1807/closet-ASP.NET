@@ -1,0 +1,112 @@
+/* Admin Panel Variables & Reset */
+:root {
+    --admin-bg: #f8f9fa;
+    --admin-danger: #e2154c;
+    --admin-text-main: #1a1d20;
+    --admin-text-muted: #6c757d;
+    --admin-border: #e9ecef;
+}
+
+body.admin-body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--admin-bg);
+    color: var(--admin-text-main);
+    overflow-x: hidden;
+}
+
+/* Sidebar Styling */
+.admin-sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #fbfbfb;
+    border-right: 1px solid var(--admin-border);
+    position: sticky;
+    top: 0;
+}
+
+.sidebar-nav .nav-link {
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar-nav .nav-link:hover:not(.active) {
+    background-color: rgba(226, 21, 76, 0.05);
+    color: var(--admin-danger) !important;
+}
+
+.sidebar-nav .nav-link.active {
+    background-color: var(--admin-danger) !important;
+    color: #ffffff !important;
+}
+
+/* Form Controls Styling */
+.admin-main .form-control, .admin-main .form-select, .admin-main .btn {
+    font-size: 0.9rem;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+}
+
+.admin-main .form-control:focus, .admin-main .form-select:focus {
+    box-shadow: 0 0 0 0.2rem rgba(226, 21, 76, 0.25);
+    border-color: var(--admin-danger);
+}
+
+.admin-main .btn-danger {
+    background-color: var(--admin-danger);
+    border-color: var(--admin-danger);
+}
+
+.admin-main .btn-danger:hover {
+    background-color: #c91242;
+    border-color: #c91242;
+}
+
+/* Products Table */
+.admin-table th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #a0a5aa;
+    border-bottom: 1px solid var(--admin-border) !important;
+}
+
+.admin-table td {
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f3f5 !important;
+    font-size: 0.9rem;
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #fcfcfc;
+}
+
+.product-thumb {
+    background-color: #f0f2f5 !important;
+}
+
+.badge.bg-success.bg-opacity-10 {
+    background-color: rgba(25, 135, 84, 0.1) !important;
+    color: #198754 !important;
+}
+
+.badge.bg-danger.bg-opacity-10 {
+    background-color: rgba(226, 21, 76, 0.1) !important;
+    color: var(--admin-danger) !important;
+}
+
+.badge {
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.text-danger {
+    color: var(--admin-danger) !important;
+}
+
+.bg-danger {
+    background-color: var(--admin-danger) !important;
+}

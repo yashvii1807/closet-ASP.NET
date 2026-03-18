@@ -1,0 +1,119 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["ActivePage"] = "Products";
+}
+@model IEnumerable<Closet_ASP.NET.Models.Product>
+
+<div class="p-4 p-md-5">
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <h1 class="h3 fw-bold mb-1">Products</h1>
+            <p class="text-secondary mb-0">Manage your store efficiently</p>
+        </div>
+        <div class="user-avatar bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center fw-semibold" style="width: 45px; height: 45px;">
+            A
+        </div>
+    </div>
+
+    <!-- Filters/Controls Toolbar -->
+    <div class="d-flex flex-wrap gap-3 align-items-center mb-4">
+        <div class="search-box position-relative flex-grow-1" style="max-width: 300px;">
+            <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+            <input type="text" class="form-control rounded-pill ps-5 border-0 shadow-sm" placeholder="Search products...">
+        </div>
+        
+        <select class="form-select border-0 shadow-sm rounded-pill w-auto px-4">
+            <option>All Categories</option>
+            <option>Men</option>
+            <option>Women</option>
+        </select>
+        
+        <select class="form-select border-0 shadow-sm rounded-pill w-auto px-4">
+            <option>All Types</option>
+            <option>Saree</option>
+            <option>Top</option>
+        </select>
+
+        <input type="number" class="form-control border-0 shadow-sm rounded-pill w-auto" placeholder="Min ₹" style="max-width: 100px;">
+        <input type="number" class="form-control border-0 shadow-sm rounded-pill w-auto" placeholder="Max ₹" style="max-width: 100px;">
+
+        <button class="btn btn-light bg-white border-0 shadow-sm rounded-pill px-4 ms-auto fw-medium">Export</button>
+        <button class="btn btn-danger rounded-pill px-4 shadow-sm fw-medium d-flex align-items-center gap-2">
+            <i class="bi bi-plus"></i> Add Product
+        </button>
+    </div>
+
+    <!-- Products Table Card -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 admin-table">
+                <thead class="text-secondary text-uppercase small" style="font-size: 0.75rem; letter-spacing: 0.5px;">
+                    <tr>
+                        <th class="border-0 ps-4 py-3 font-weight-norm">Image</th>
+                        <th class="border-0 py-3 font-weight-norm">Product Name</th>
+                        <th class="border-0 py-3 font-weight-norm">Category</th>
+                        <th class="border-0 py-3 font-weight-norm">Type</th>
+                        <th class="border-0 py-3 font-weight-norm">Price</th>
+                        <th class="border-0 py-3 font-weight-norm">Stock Status</th>
+                        <th class="border-0 pe-4 py-3 font-weight-norm">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="border-top-0">
+                    @if (ViewBag.Products != null)
+                    {
+                        foreach (var product in ViewBag.Products)
+                        {
+                            <tr>
+                                <td class="ps-4 py-3">
+                                    <div class="product-thumb rounded-3 bg-light d-flex justify-content-center align-items-center overflow-hidden" style="width: 50px; height: 50px;">
+                                        @if (product.Images != null && product.Images.Count > 0)
+                                        {
+                                            <img src="@product.Images[0]" alt="@product.Title" class="img-fluid object-fit-cover w-100 h-100">
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-image text-muted"></i>
+                                        }
+                                    </div>
+                                </td>
+                                <td class="py-3">
+                                    <div class="fw-semibold text-dark">@product.Title</div>
+                                    <div class="text-secondary small mt-1">@(product.SubCategory ?? "Generic")</div>
+                                </td>
+                                <td class="py-3">
+                                    <span class="badge bg-light text-dark rounded-pill px-3 py-2 border fw-normal">@product.MainCategory</span>
+                                </td>
+                                <td class="py-3 text-secondary">
+                                    @(product.Category?.ToUpper())
+                                </td>
+                                <td class="py-3 fw-medium">
+                                    ₹@product.Price
+                                </td>
+                                <td class="py-3">
+                                    @if(product.Stock > 0)
+                                    {
+                                        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 fw-normal">@product.Stock in stock</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2 fw-normal">Out of stock</span>
+                                    }
+                                </td>
+                                <td class="pe-4 py-3">
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-light bg-transparent border-0 text-secondary p-1">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-light bg-transparent border-0 text-secondary p-1">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

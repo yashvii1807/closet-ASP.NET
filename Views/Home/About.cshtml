@@ -1,0 +1,185 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>About - Closet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="min-h-screen bg-fashion-gradient">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Back Button -->
+        <a href="/" class="flex items-center text-gray-600 hover:text-rose-600 mb-6 transition-colors">
+            <i data-lucide="arrow-left" class="h-5 w-5 mr-2"></i>
+            Back to Store
+        </a>
+
+        <!-- Hero Section -->
+        <div class="rounded-3xl border border-white/40 bg-white/30 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-12 mb-12 text-center">
+            <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+                About <span class="text-rose-600">Closet</span>
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Your ultimate fashion destination for trendy clothing and timeless classics.
+                We believe fashion should be accessible, sustainable, and empowering.
+            </p>
+        </div>
+
+        <!-- Mission Section -->
+        <div class="rounded-3xl border border-white/40 bg-white/30 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-12 mb-12">
+
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Mission</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    To provide high-quality, stylish clothing that makes you feel confident and look your best,
+                    while promoting sustainable and ethical fashion practices.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                <!-- Card 1 -->
+                <div class="text-center group">
+                    <div class="rounded-2xl border border-white/30 bg-white/20 backdrop-blur-xl p-8 hover:bg-white/30 transition-all">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-xl bg-rose-500 text-white mx-auto mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="building" class="h-8 w-8"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Our Story</h3>
+                        <p class="text-gray-600">
+                            Founded in 2025, Closet started as a small boutique with a big dream:
+                            to revolutionize the way people shop for clothes online.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="text-center group">
+                    <div class="rounded-2xl border border-white/30 bg-white/20 backdrop-blur-xl p-8 hover:bg-white/30 transition-all">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-xl bg-amber-500 text-white mx-auto mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="users" class="h-8 w-8"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Our Team</h3>
+                        <p class="text-gray-600">
+                            We are a passionate team of fashion lovers, designers, and tech enthusiasts
+                            dedicated to creating an exceptional shopping experience.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="text-center group">
+                    <div class="rounded-2xl border border-white/30 bg-white/20 backdrop-blur-xl p-8 hover:bg-white/30 transition-all">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-xl bg-purple-500 text-white mx-auto mb-6 group-hover:scale-110 transition-transform">
+                            <i data-lucide="target" class="h-8 w-8"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Our Vision</h3>
+                        <p class="text-gray-600">
+                            To become the leading online destination for conscious consumers who value
+                            style, quality, and ethical production.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Values Section -->
+        <div class="rounded-3xl border border-white/40 bg-white/30 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-12 mb-12">
+
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Why Choose Closet?</h2>
+                <p class="text-lg text-gray-600">
+                    We're committed to providing you with the best fashion experience
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <div class="flex items-start space-x-4">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-xl bg-rose-500 text-white">
+                        <i data-lucide="heart" class="h-6 w-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Quality First</h4>
+                        <p class="text-gray-600">
+                            Every piece is carefully selected for quality, comfort, and style.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-4">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-xl bg-green-500 text-white">
+                        <i data-lucide="award" class="h-6 w-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Sustainable Fashion</h4>
+                        <p class="text-gray-600">
+                            We partner with ethical manufacturers and promote sustainability.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-4">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-xl bg-blue-500 text-white">
+                        <i data-lucide="truck" class="h-6 w-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Fast Delivery</h4>
+                        <p class="text-gray-600">
+                            Quick and reliable shipping to your doorstep.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="rounded-3xl border border-white/40 bg-white/30 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-3xl font-bold text-rose-600 mb-2">10K+</div>
+                    <div class="text-gray-600">Happy Customers</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-rose-600 mb-2">500+</div>
+                    <div class="text-gray-600">Products</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-rose-600 mb-2">50+</div>
+                    <div class="text-gray-600">Brands</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-rose-600 mb-2">99%</div>
+                    <div class="text-gray-600">Satisfaction Rate</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>
