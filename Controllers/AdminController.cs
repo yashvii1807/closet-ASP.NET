@@ -44,5 +44,24 @@ namespace Closet_ASP.NET.Controllers
             ViewBag.Products = products;
             return View();
         }
+        public IActionResult Orders()
+        {
+            return View();
+        }
+
+        public IActionResult Users()
+        {
+            return View();
+        }
+
+        public IActionResult Reviews()
+        {
+            return View();
+        }
+
+        public IActionResult Messages()
+        {
+            return View();
+        }
     }
 }
