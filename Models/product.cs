@@ -1,4 +1,4 @@
-﻿namespace Closet_ASP.NET.Models
+namespace Closet_ASP.NET.Models
 {
         public class Product
         {
@@ -12,6 +12,7 @@
             public double AverageRating { get; set; }
             public int NumRatings { get; set; }
             public List<string>? Images { get; set; }
+            public int Quantity { get; set; } = 1;
         }
     
 }

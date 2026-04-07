@@ -1,0 +1,127 @@
+@model UserProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container-fluid px-5 py-5" style="min-height: 80vh; background: linear-gradient(135deg, #fdf8f6 0%, #f4eff9 100%);">
+    <!-- Back Link -->
+    <div class="mb-4">
+        <a href="/" class="text-secondary text-decoration-none d-flex align-items-center gap-2" style="font-size: 0.9rem;">
+            <i class="bi bi-arrow-left"></i> Back to Store
+        </a>
+    </div>
+
+    <div class="row g-4 justify-content-center mx-auto" style="max-width: 1100px;">
+        <!-- Left: Profile Card -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white h-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                <div class="position-relative mb-4 mx-auto" style="width: 140px;">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-light" style="width: 140px; height: 140px; border: 4px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.05);">
+                        <i class="bi bi-person-fill text-secondary" style="font-size: 5.5rem; opacity: 0.3;"></i>
+                    </div>
+                    <button class="position-absolute bottom-0 end-0 border-0 rounded-circle d-flex align-items-center justify-content-center text-white p-2 shadow-sm" style="background-color: #e2154c; width: 36px; height: 36px; transform: translate(5px, -5px);">
+                        <i class="bi bi-camera"></i>
+                    </button>
+                </div>
+
+                <h4 class="fw-bold mb-1" style="color: #1a202c; font-size: 1.3rem; letter-spacing: -0.5px;">@Model?.Name</h4>
+                <div class="text-secondary mb-4" style="font-size: 0.85rem;">@Model?.Email</div>
+
+                <div class="d-inline-block mx-auto">
+                    <span class="badge rounded-pill fw-semibold px-4 py-2" style="background-color: #fee2e2; color: #e2154c; font-size: 0.75rem;">
+                        Member since @Model?.JoinDate
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Edit Form Card -->
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white h-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                <div class="d-flex align-items-center gap-2 mb-5">
+                    <i class="bi bi-pencil-square" style="color: #e2154c; font-size: 1.3rem;"></i>
+                    <h4 class="fw-bold mb-0" style="color: #1a202c; font-size: 1.3rem; letter-spacing: -0.5px;">Edit Profile</h4>
+                </div>
+                
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success border-0 rounded-3 shadow-sm mb-4 d-flex align-items-center gap-2" role="alert" style="background-color: #f0fdf4; color: #166534;">
+                        <i class="bi bi-check-circle-fill"></i>
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+
+                <form asp-action="Profile" method="post">
+                    <!-- Hidden Email for Post -->
+                    <input type="hidden" asp-for="Email" />
+
+                    <!-- Name Input -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold mb-2" style="font-size: 0.85rem; color: #4a5568;">Full Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-secondary pe-0">
+                                <i class="bi bi-person ms-1"></i>
+                            </span>
+                            <input asp-for="Name" class="form-control border-start-0 py-2 ps-3 shadow-none fw-medium" placeholder="Enter your name" style="font-size: 0.95rem; border-color: #e2e8f0; color: #1a202c;">
+                        </div>
+                        <span asp-validation-for="Name" class="text-danger mt-1 d-block" style="font-size: 0.8rem;"></span>
+                    </div>
+
+                    <!-- Phone Input -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold mb-2" style="font-size: 0.85rem; color: #4a5568;">Phone Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 text-secondary pe-0">
+                                <i class="bi bi-telephone ms-1"></i>
+                            </span>
+                            <input asp-for="Contact" class="form-control border-start-0 py-2 ps-3 shadow-none fw-medium" placeholder="Enter your phone number" style="font-size: 0.95rem; border-color: #e2e8f0; color: #1a202c;">
+                        </div>
+                        <span asp-validation-for="Contact" class="text-danger mt-1 d-block" style="font-size: 0.8rem;"></span>
+                    </div>
+
+                    <!-- Email Input (Readonly) -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold mb-2" style="font-size: 0.85rem; color: #4a5568;">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text border-end-0 text-secondary pe-0" style="background-color: #f8fafc;">
+                                <i class="bi bi-envelope ms-1"></i>
+                            </span>
+                            <input type="email" class="form-control border-start-0 py-2 ps-3 shadow-none text-secondary" value="@Model?.Email" placeholder="Enter your email id" disabled style="background-color: #f8fafc; font-size: 0.95rem; border-color: #e2e8f0;">
+                        </div>
+                        <p class="text-secondary mt-2 mb-0" style="font-size: 0.75rem;">Email cannot be changed</p>
+                    </div>
+
+                    <!-- Password Section -->
+                    <div class="mb-5">
+                        <label class="form-label fw-semibold mb-2" style="font-size: 0.85rem; color: #4a5568;">Password</label>
+                        <button type="button" class="btn w-100 rounded-3 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2" style="background-color: #fff1f2; color: #e2154c; border: 1px solid #fecdd3; font-size: 0.95rem;">
+                            <i class="bi bi-lock"></i> Change Password
+                        </button>
+                    </div>
+
+                    <!-- Save Button -->
+                    <button type="submit" class="btn btn-danger w-100 rounded-3 py-3 fw-bold text-white shadow-sm" style="background-color: #e2154c; font-size: 0.95rem; letter-spacing: 0.5px;">
+                        Save Changes
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    .input-group:focus-within .input-group-text,
+    .input-group:focus-within .form-control {
+        border-color: #e2154c !important;
+    }
+    
+    .form-control::placeholder {
+        color: #a0aec0;
+        font-weight: 400;
+    }
+</style>

@@ -1,0 +1,120 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["ActivePage"] = "Products";
+}
+
+<div class="p-4 p-md-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold mb-1">Add New Product</h1>
+            <p class="text-secondary mb-0">List your fashion items with clear details</p>
+        </div>
+        <a href="/Admin/Products" class="btn btn-light bg-white border-0 shadow-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+            <i class="bi bi-x fs-4"></i>
+        </a>
+    </div>
+
+    <!-- Product Form Card -->
+    <div class="card border-0 shadow-sm rounded-4 p-5 bg-white">
+        <form action="/Admin/AddProduct" method="post">
+            <div class="row g-4">
+                <!-- Title and Price -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold" style="font-size: 0.9rem; color: #1a202c;">Title *</label>
+                    <input type="text" name="Title" class="form-control rounded-3 py-2 px-3 shadow-none border" placeholder="Enter product title" style="border-color: #e2e8f0; font-size: 0.95rem;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold" style="font-size: 0.9rem; color: #1a202c;">Price (₹) *</label>
+                    <input type="number" name="Price" class="form-control rounded-3 py-2 px-3 shadow-none border" value="0" style="border-color: #e2e8f0; font-size: 0.95rem;">
+                </div>
+
+                <!-- Brand and Status -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold" style="font-size: 0.9rem; color: #1a202c;">Brand</label>
+                    <input type="text" name="SubCategory" class="form-control rounded-3 py-2 px-3 shadow-none border" placeholder="Enter brand name" style="border-color: #e2e8f0; font-size: 0.95rem;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold" style="font-size: 0.9rem; color: #1a202c;">Status</label>
+                    <select class="form-select rounded-3 py-2 px-3 shadow-none border" style="border-color: #e2e8f0; font-size: 0.95rem;">
+                        <option selected>Active</option>
+                        <option>Inactive</option>
+                        <option>Draft</option>
+                    </select>
+                </div>
+
+                <!-- Category and Type -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold" style="font-size: 0.9rem; color: #1a202c;">Category *</label>
+                    <select name="MainCategory" class="form-select rounded-3 py-2 px-3 shadow-none border" style="border-color: #e2e8f0; font-size: 0.95rem;">
+                        <option selected>Select</option>
+                        <option value="Men">Men</option>
+                        <option value="Women">Women</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold" style="font-size: 0.9rem; color: #1a202c;">Type *</label>
+                    <select name="Category" class="form-select rounded-3 py-2 px-3 shadow-none border" style="border-color: #e2e8f0; font-size: 0.95rem;">
+                        <option selected>Select</option>
+                        <option value="TOP">Top</option>
+                        <option value="LOWER">Lower</option>
+                        <option value="SAREE">Saree</option>
+                    </select>
+                </div>
+
+                <!-- Description -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold" style="font-size: 0.9rem; color: #1a202c;">Description</label>
+                    <textarea class="form-control rounded-3 py-2 px-3 shadow-none border" rows="4" placeholder="Enter product description" style="border-color: #e2e8f0; font-size: 0.95rem;"></textarea>
+                </div>
+
+                <!-- Product Images Upload -->
+                <div class="col-12 mt-5">
+                    <label class="form-label fw-semibold" style="font-size: 0.9rem; color: #1a202c;">Product Images *</label>
+                    <div class="upload-area rounded-4 border-2 border-dashed d-flex align-items-center justify-content-center flex-column py-5" style="border-color: #cbd5e1; background-color: #fbfbfc; cursor: pointer;">
+                        <div class="mb-2" style="color: #64748b;">
+                            <i class="bi bi-upload fs-4"></i>
+                        </div>
+                        <span class="text-secondary fw-medium" style="font-size: 0.8rem; letter-spacing: 1px;">UPLOAD</span>
+                        <input type="file" id="imageInput" hidden accept="image/*" multiple>
+                    </div>
+                </div>
+
+                <!-- Colors -->
+                <div class="col-md-6 ms-auto mt-4">
+                    <label class="form-label fw-semibold" style="font-size: 0.9rem; color: #1a202c;">Colors (comma separated)</label>
+                    <input type="text" class="form-control rounded-3 py-2 px-3 shadow-none border" placeholder="Red, Blue, Green" style="border-color: #e2e8f0; font-size: 0.95rem;">
+                </div>
+
+                <!-- Actions -->
+                <div class="col-12 d-flex justify-content-end gap-3 mt-5">
+                    <a href="/Admin/Products" class="btn text-secondary fw-semibold text-decoration-none px-4 py-2" style="font-size: 0.9rem;">Cancel</a>
+                    <button type="submit" class="btn btn-danger rounded-3 px-5 py-2 fw-semibold border-0" style="background-color: #e22e51; font-size: 0.95rem;">Save Product</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .form-control:focus, .form-select:focus, textarea:focus {
+        border-color: #e22e51 !important;
+        box-shadow: none !important;
+    }
+    
+    .upload-area:hover {
+        border-color: #e22e51 !important;
+        background-color: #fff1f2 !important;
+    }
+    
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
+
+<script>
+    document.querySelector('.upload-area').addEventListener('click', () => {
+        document.querySelector('#imageInput').click();
+    });
+</script>

@@ -9,6 +9,11 @@ namespace Closet_ASP.NET.Controllers
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
+        // Reference centralized data
+        public static List<UserViewModel> UserList => AppData.UserList;
+        public static List<Product> ProductList => AppData.AllProducts;
+
+
         public AdminController(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
@@ -24,32 +29,75 @@ namespace Closet_ASP.NET.Controllers
             var client = _httpClientFactory.CreateClient();
             var url = "http://localhost:4000/api/products";
             
-            List<Product> products = new();
-            try
-            {
-                var response = await client.GetFromJsonAsync<List<Product>>(url);
-                products = response ?? new();
-            }
-            catch 
-            { 
-               // For testing/mocking if API fails based on the screenshot
-               products = new List<Product>
-               {
-                   new Product { Title = "Shirst", MainCategory = "Women", SubCategory = "Fabindia", Category = "SAREE", Price = 4499, Stock = 44 },
-                   new Product { Title = "Pantt", MainCategory = "Men", SubCategory = "Peater England", Category = "LOWER", Price = 2499, Stock = 95 },
-                   new Product { Title = "T-Shirt", MainCategory = "Men", SubCategory = "U.S.Polo", Category = "TOP", Price = 699, Stock = 133 }
-               };
-            }
-
-            ViewBag.Products = products;
+            // For testing/mocking if API fails or simply to use local list
+            ViewBag.Products = ProductList;
             return View();
         }
-        public IActionResult Orders()
+
+        public IActionResult AddProduct()
         {
             return View();
         }
 
+        [HttpPost]
+        public IActionResult AddProduct(Product newProduct)
+        {
+            if (newProduct != null)
+            {
+                newProduct.Id = (ProductList.Count + 1).ToString();
+                newProduct.Images = new List<string> { "/images/Men's Light Blue Polo T-shirt_1.png" };
+                newProduct.Stock = 100;
+                ProductList.Insert(0, newProduct);
+            }
+            return RedirectToAction("Products");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteProduct(string title)
+        {
+            var product = ProductList.FirstOrDefault(p => p.Title == title);
+            if (product != null)
+            {
+                ProductList.Remove(product);
+            }
+            return RedirectToAction("Products");
+        }
+
+        public IActionResult AddUser()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddUser(UserViewModel newUser)
+        {
+            if (newUser != null)
+            {
+                newUser.JoinDate = DateTime.Now.ToShortDateString();
+                newUser.HasLogo = false;
+                UserList.Add(newUser);
+            }
+            return RedirectToAction("Users");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteUser(string email)
+        {
+            var user = UserList.FirstOrDefault(u => u.Email == email);
+            if (user != null)
+            {
+                UserList.Remove(user);
+            }
+            return RedirectToAction("Users");
+        }
+
         public IActionResult Users()
+        {
+            ViewBag.Users = UserList;
+            return View();
+        }
+        
+        public IActionResult Orders()
         {
             return View();
         }
@@ -63,5 +111,15 @@ namespace Closet_ASP.NET.Controllers
         {
             return View();
         }
+    }
+
+    public class UserViewModel
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Role { get; set; }
+        public string Contact { get; set; }
+        public string JoinDate { get; set; }
+        public bool HasLogo { get; set; }
     }
 }

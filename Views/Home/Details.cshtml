@@ -1,0 +1,376 @@
+@model Closet_ASP.NET.Models.Product
+@{
+    ViewData["Title"] = Model.Title;
+    var imgSrc = Model.Images != null && Model.Images.Count > 0
+                        ? Model.Images[0]
+                        : "https://placehold.co/600x800?text=Product+Image";
+}
+
+<style>
+    .details-page-wrapper {
+        background: linear-gradient(180deg, rgba(255,240,240,0.6) 0%, rgba(255,255,255,1) 400px);
+        min-height: 100vh;
+        padding-top: 30px;
+        padding-bottom: 50px;
+    }
+    
+    .back-btn {
+        color: #6c757d;
+        text-decoration: none;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .back-btn:hover {
+        color: #343a40;
+    }
+
+    .product-img-card {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .product-img-card img {
+        max-width: 100%;
+        height: auto;
+        max-height: 600px;
+        object-fit: contain;
+    }
+
+    .product-title-large {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #1a1a1a;
+        margin-bottom: 5px;
+    }
+
+    .rating-wrap i {
+        color: #ffc107;
+        font-size: 1.1rem;
+    }
+
+    .review-count {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-left: 8px;
+    }
+
+    .product-price-large {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #e2154c;
+        margin-top: 15px;
+        margin-bottom: 25px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #212529;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .size-box {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        background: white;
+        transition: all 0.2s;
+        position: relative;
+    }
+
+    .size-box:hover:not(.out-of-stock) {
+        border-color: #212529;
+    }
+
+    .size-box.out-of-stock {
+        color: #adb5bd;
+        cursor: not-allowed;
+    }
+
+    .size-box.out-of-stock::after {
+        content: '';
+        position: absolute;
+        width: 90%;
+        height: 1px;
+        background-color: red;
+        top: 50%;
+        left: 5%;
+        transform: rotate(-45deg);
+    }
+    
+    .stock-warning {
+        font-size: 0.65rem;
+        color: #fd7e14;
+        position: absolute;
+        bottom: -18px;
+        white-space: nowrap;
+    }
+
+    .color-box {
+        padding: 6px 16px;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        background: white;
+        display: inline-block;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .qty-control {
+        display: flex;
+        align-items: center;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        width: fit-content;
+        background: white;
+    }
+
+    .qty-btn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+        color: #495057;
+    }
+
+    .qty-val {
+        width: 36px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.95rem;
+        border-left: 1px solid #dee2e6;
+        border-right: 1px solid #dee2e6;
+        line-height: 32px;
+    }
+
+    .btn-action-main {
+        background-color: #ced4da;
+        color: #6c757d;
+        border: none;
+        border-radius: 8px;
+        padding: 12px;
+        font-weight: 600;
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-wishlist-square {
+        width: 48px;
+        height: 48px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #495057;
+        font-size: 1.1rem;
+        cursor: pointer;
+    }
+    
+    .btn-wishlist-square:hover {
+        background-color: #f8f9fa;
+    }
+
+    .meta-info {
+        font-size: 0.9rem;
+        color: #495057;
+        margin-top: 30px;
+        border-bottom: 1px solid #f1f3f5;
+        padding-bottom: 30px;
+    }
+
+    .meta-info strong {
+        color: #212529;
+    }
+
+    .review-section {
+        margin-top: 30px;
+    }
+
+    .review-textarea {
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        padding: 15px;
+        font-size: 0.95rem;
+        resize: vertical;
+        box-shadow: none;
+    }
+
+    .review-textarea:focus {
+        border-color: #e2154c;
+        box-shadow: 0 0 0 0.2rem rgba(226, 21, 76, 0.1);
+    }
+
+    .btn-submit-review {
+        background-color: #e2154c;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 20px;
+        font-weight: 600;
+    }
+    
+    .btn-submit-review:hover {
+        background-color: #d11244;
+    }
+
+    .customer-review-item {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .reviewer-avatar {
+        width: 40px;
+        height: 40px;
+        background-color: #e9ecef;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #adb5bd;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .reviewer-name {
+        font-weight: 600;
+        color: #212529;
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+    }
+    
+    .review-date {
+        color: #868e96;
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+    }
+
+    .review-text {
+        color: #495057;
+        font-size: 0.95rem;
+    }
+</style>
+
+<div class="details-page-wrapper">
+    <div class="container px-5">
+        <div class="mb-4">
+            <a href="/" class="back-btn"><i class="bi bi-arrow-left"></i> Back</a>
+        </div>
+
+        <div class="row g-5">
+            <!-- Left: Product Image -->
+            <div class="col-md-5">
+                <div class="product-img-card">
+                    <img src="@imgSrc" alt="@Model.Title" onerror="this.src='https://placehold.co/600x800?text=Product+Image'" />
+                </div>
+            </div>
+
+            <!-- Right: Product Information -->
+            <div class="col-md-7 ps-md-4">
+                <h1 class="product-title-large">@Model.Title</h1>
+                
+                <div class="rating-wrap d-flex align-items-center mb-1">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <span class="review-count">5.0 (2 reviews)</span>
+                </div>
+
+                <div class="product-price-large">₹@Model.Price</div>
+
+                <div class="mb-4 position-relative">
+                    <span class="info-label">Size <span class="text-danger">*</span></span>
+                    <div class="d-flex gap-2 align-items-center">
+                        <div class="size-box">28</div>
+                        <div class="size-box d-flex flex-column align-items-center position-relative">
+                            30
+                            <span class="stock-warning">Only 8 left</span>
+                        </div>
+                        <div class="size-box out-of-stock">32</div>
+                        <div class="size-box">34</div>
+                        <div class="size-box">36</div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <span class="info-label">Color</span>
+                    <div class="color-box">Blue</div>
+                </div>
+
+                <div class="mb-4">
+                    <span class="info-label">Quantity</span>
+                    <div class="qty-control">
+                        <div class="qty-btn">-</div>
+                        <div class="qty-val">1</div>
+                        <div class="qty-btn">+</div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3 mb-4 mt-2">
+                    <button class="btn-action-main">
+                        <i class="bi bi-cart2"></i> Select Size
+                    </button>
+                    <a href="/Home/AddToWishlist/@Model.Id" class="btn-wishlist-square text-decoration-none">
+                        <i class="bi bi-heart"></i>
+                    </a>
+                </div>
+
+                <div class="meta-info">
+                    <div class="mb-2"><strong>Category:</strong> @Model.Category</div>
+                    <div><strong>Availability:</strong> <span class="text-success">In Stock</span></div>
+                </div>
+
+                <!-- Write a Review -->
+                <div class="review-section border-bottom pb-4 mb-4">
+                    <h5 class="fw-bold mb-3 fs-6">Write a review</h5>
+                    <div class="d-flex align-items-center gap-1 mb-3">
+                        <div class="rating-wrap">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <span class="text-secondary small ms-2">(5 out of 5)</span>
+                    </div>
+                    
+                    <textarea class="form-control review-textarea mb-3" rows="4" placeholder="Share your thoughts about this product..."></textarea>
+                    
+                    <button class="btn-submit-review">Submit Review</button>
+                </div>
+
+           
+                    
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

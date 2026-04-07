@@ -5,36 +5,141 @@
     <title>Closet</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <!-- Custom CSS -->
     <link href="~/css/style.css" rel="stylesheet" />
-    
 </head>
 <body>
 
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg bg-light shadow-sm px-5 py-3">
-        <a class="navbar-brand fw-bold fs-4" href="#">Closet</a>
+    <nav class="navbar navbar-expand-lg px-5 py-3">
+        <a class="navbar-brand fs-3" href="/">Closet</a>
 
         <div class="collapse navbar-collapse justify-content-center">
+            @{
+                var activePageCat = Context.Request.Query["pageCategory"].ToString();
+            }
             <ul class="navbar-nav gap-4">
-                <li class="nav-item"><a class="nav-link text-dark" href="#">Men</a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="#">Women</a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="#">About</a></li>
-                <li class="nav-item"><a class="nav-link text-dark" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link @(activePageCat == "Men" ? "text-danger fw-bold" : "")" href="/?pageCategory=Men">Men</a></li>
+                <li class="nav-item"><a class="nav-link @(activePageCat == "Women" ? "text-danger fw-bold" : "")" href="/?pageCategory=Women">Women</a></li>
+                <li class="nav-item"><a class="nav-link" href="/Home/About">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/Home/Contact">Contact</a></li>
             </ul>
         </div>
 
-        <div class="d-flex gap-3">
-            <a class="btn btn-danger px-4">Login</a>
-            <a class="btn btn-danger px-4">Register</a>
+        <div class="d-flex align-items-center gap-4 mt-2 mt-lg-0">
+            @if (string.IsNullOrEmpty(Context.Session.GetString("UserEmail")))
+            {
+                <a href="/Home/Login" class="btn btn-outline-danger px-4 rounded-pill fw-semibold">Login</a>
+                <a href="/Home/Register" class="btn btn-danger px-4 rounded-pill fw-semibold">Register</a>
+            }
+            else
+            {
+                <a href="/Home/Wishlist" class="text-dark fs-5 position-relative text-decoration-none">
+                    <i class="bi bi-heart"></i>
+                    @if (Closet_ASP.NET.Controllers.HomeController.WishlistItems.Count > 0)
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger d-flex align-items-center justify-content-center" style="font-size: 0.65rem; width: 18px; height: 18px; padding: 0;">
+                            @Closet_ASP.NET.Controllers.HomeController.WishlistItems.Count
+                        </span>
+                    }
+                </a>
+                <a href="/Home/Cart" class="text-dark fs-5 position-relative text-decoration-none">
+                    <i class="bi bi-cart2"></i>
+                    @if (Closet_ASP.NET.Controllers.HomeController.CartItems.Count > 0)
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger d-flex align-items-center justify-content-center" style="font-size: 0.65rem; width: 18px; height: 18px; padding: 0;">
+                            @Closet_ASP.NET.Controllers.HomeController.CartItems.Count
+                        </span>
+                    }
+                </a>
+                <div class="dropdown position-relative">
+                    <a href="#" class="d-block text-decoration-none border-0 bg-transparent p-0" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="bg-secondary bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center hover-overlay" style="width: 32px; height: 32px; cursor: pointer;">
+                            <i class="bi bi-person-fill text-secondary"></i>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-2 mt-2 py-0 overflow-hidden" aria-labelledby="profileDropdown" style="width: 250px;">
+                        <li class="p-3 pb-2 border-bottom">
+                            <div class="fw-bold text-dark mb-1" style="font-size: 0.85rem;">@Context.Session.GetString("UserEmail")</div>
+                            <div class="text-secondary" style="font-size: 0.75rem;">Connected Account</div>
+                        </li>
+                        <li class="pt-2">
+                            <a class="dropdown-item py-2 text-secondary d-flex align-items-center gap-3" href="/Home/Profile" style="font-size: 0.85rem;"><i class="bi bi-person text-secondary" style="font-size: 1.1rem;"></i> Profile</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 text-secondary d-flex align-items-center gap-3" href="/Home/Orders" style="font-size: 0.85rem;"><i class="bi bi-box-seam text-secondary" style="font-size: 1.1rem;"></i> Orders</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 text-secondary d-flex align-items-center gap-3" href="/Home/Wishlist" style="font-size: 0.85rem;"><i class="bi bi-heart text-secondary" style="font-size: 1.1rem;"></i> Wishlist</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 text-secondary d-flex align-items-center gap-3" href="/Admin/Index" style="font-size: 0.85rem;"><i class="bi bi-grid text-secondary" style="font-size: 1.1rem;"></i> Admin Dashboard</a>
+                        </li>
+                        <li class="pb-2">
+                            <a class="dropdown-item py-2 text-secondary d-flex align-items-center gap-3" href="/Home/Logout" style="font-size: 0.85rem;"><i class="bi bi-box-arrow-right text-secondary" style="font-size: 1.1rem;"></i> Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            }
         </div>
     </nav>
 
     @RenderBody()
 
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container-fluid px-5">
+            <div class="row mb-5">
+                <div class="col-md-3">
+                    <h4 class="fw-bold text-white mb-3">Closet</h4>
+                    <p class="text-white-50 small mb-4" style="line-height: 1.6;">Your ultimate fashion destination for trendy clothing.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white-50"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white-50"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white-50"><i class="bi bi-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="fw-bold text-white mb-4">Company</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><a href="/Home/About" class="text-white-50 text-decoration-none small">About Us</a></li>
+                        <li class="mb-3"><a href="/Home/Contact" class="text-white-50 text-decoration-none small">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="fw-bold text-white mb-4">Account</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><a href="/Home/Profile" class="text-white-50 text-decoration-none small">My Profile</a></li>
+                        <li class="mb-3"><a href="/Home/Cart" class="text-white-50 text-decoration-none small">Cart</a></li>
+                        <li class="mb-3"><a href="/Home/Wishlist" class="text-white-50 text-decoration-none small">Wishlist</a></li>
+                        <li class="mb-3"><a href="/Home/Orders" class="text-white-50 text-decoration-none small">Order History</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="fw-bold text-white mb-4">Contact Us</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><a href="mailto:support@closet.com" class="text-white-50 text-decoration-none small"><i class="bi bi-envelope me-2"></i> support@closet.com</a></li>
+                        <li class="mb-3"><a href="tel:+919876543210" class="text-white-50 text-decoration-none small"><i class="bi bi-telephone me-2"></i> +91 98765 43210</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-top border-secondary pt-4 text-center">
+                <p class="text-white-50 small mb-0">&copy; 2025 Closet. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle (including Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

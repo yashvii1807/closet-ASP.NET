@@ -1,34 +1,18 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
 @{
+    ViewData["Title"] = "About - Closet";
 }
 
+<!-- Tailwind CDN for this page only -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
 
-@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>About - Closet</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Tailwind CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-
-<body class="min-h-screen bg-fashion-gradient">
+<div class="min-h-screen bg-fashion-gradient">
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <!-- Back Button -->
-        <a href="/" class="flex items-center text-gray-600 hover:text-rose-600 mb-6 transition-colors">
+        <a href="/" class="flex items-center text-gray-600 hover:text-rose-600 mb-6 transition-colors text-decoration-none">
             <i data-lucide="arrow-left" class="h-5 w-5 mr-2"></i>
             Back to Store
         </a>
@@ -177,9 +161,10 @@
 
     </div>
 
+</div>
+
+@section Scripts {
     <script>
         lucide.createIcons();
     </script>
-
-</body>
-</html>
+}

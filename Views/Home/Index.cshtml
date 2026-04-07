@@ -8,139 +8,99 @@
     var selSub = ViewBag.SelectedSub as string ?? "All";
     var sortBy = ViewBag.SortBy as string ?? "name";
     var priceRange = ViewBag.PriceRange as string ?? "all";
-    var viewMode = ViewBag.ViewMode as string ?? "grid";
 
     string[] subCats = { "All", "TOP", "LOWER", "SAREE" };
     string[] mainCats = { "All", "Men", "Women" };
 }
 
-<!-- HERO -->
-<div class="hero-section">
-    @if (string.IsNullOrEmpty(pageCategory))
+<div class="container-fluid px-5 pb-4">
+    
+    <!-- HERO -->
+    @if(string.IsNullOrEmpty(pageCategory))
     {
-        <h1>Welcome to Closet</h1>
-        <p>Discover the latest fashion trends and timeless classics.</p>
-        <button class="shop-btn">Shop Now</button>
+        <div class="hero-section">
+            <h1>Welcome to Closet</h1>
+            <p>Discover the latest fashion trends and timeless classics.</p>
+            <button class="shop-btn">Shop Now</button>
+        </div>
     }
     else
     {
-        <h1>@pageCategory's Collection</h1>
-        <p>Explore our curated selection for @pageCategory.ToLower().</p>
+        <div class="py-4 px-2" style="margin-top: 10px;">
+            <h1 class="fw-bold text-dark fs-2 mb-2">@pageCategory's Collection</h1>
+            <p class="text-secondary" style="font-size: 0.95rem;">Explore our curated selection for @pageCategory.ToLower().</p>
+        </div>
     }
-</div>
 
-<div class="container-fluid px-5">
-    <div class="row">
-
-        <!-- FILTER -->
-        <div class="col-md-3">
+    <!-- MAIN CONTENT -->
+    <div class="row mt-4">
+        <!-- FILTER SIDEBAR -->
+        <div class="col-md-3 pe-md-4">
             <div class="filter-box">
-                <h5>Filters</h5>
-                <hr />
-
-                <!-- Sub Categories -->
-                <p class="fw-bold mb-1">Sub Categories</p>
-                @foreach (var cat in subCats)
-                {
-                    var count = cat == "All"
-                    ? allProducts.Count
-                    : allProducts.Count(p => p.SubCategory == cat);
-                    <a asp-controller="Home" asp-action="Index"
-                       asp-route-pageCategory="@pageCategory"
-                       asp-route-selectedMainCategory="@selMain"
-                       asp-route-selectedSubCategory="@cat"
-                       asp-route-sortBy="@sortBy"
-                       asp-route-priceRange="@priceRange"
-                       class="d-block text-decoration-none @(selSub == cat ? "fw-bold text-danger" : "text-dark")">
-                        @cat (@count)
-                    </a>
-                }
-
-                <hr />
-
-                <!-- Main Categories -->
-                @if (string.IsNullOrEmpty(pageCategory))
-                {
-                    <p class="fw-bold mb-1">Main Categories</p>
-                    @foreach (var cat in mainCats)
+                <div class="filter-title">
+                    <i class="bi bi-funnel text-secondary"></i> Filters
+                </div>
+                
+                <div class="filter-label">Sub Categories</div>
+                <div class="d-flex flex-column gap-1">
+                    @foreach (var cat in subCats)
                     {
-                        var count = cat == "All"
-                        ? allProducts.Count
-                        : allProducts.Count(p => p.MainCategory == cat);
-                        <a asp-controller="Home" asp-action="Index"
-                           asp-route-selectedMainCategory="@cat"
-                           asp-route-selectedSubCategory="@selSub"
-                           asp-route-sortBy="@sortBy"
-                           asp-route-priceRange="@priceRange"
-                           class="d-block text-decoration-none @(selMain == cat ? "fw-bold text-danger" : "text-dark")">
-                            @cat (@count)
+                        var count = cat == "All" ? allProducts.Count : allProducts.Count(p => p.Category == cat || p.SubCategory == cat);
+                        <a href="?selectedSubCategory=@cat" class="category-item @(selSub == cat ? "active" : "")">
+                            <span>@cat</span>
+                            <span>@count</span>
                         </a>
                     }
-                    <hr />
+                </div>
+
+                @if (string.IsNullOrEmpty(pageCategory))
+                {
+                    <div class="filter-label">Main Categories</div>
+                    <div class="d-flex flex-column gap-1">
+                        @foreach (var cat in mainCats)
+                        {
+                            var count = cat == "All" ? allProducts.Count : allProducts.Count(p => p.MainCategory == cat);
+                            <a href="?selectedMainCategory=@cat" class="category-item @(selMain == cat ? "active" : "")">
+                                <span>@cat</span>
+                                <span>@count</span>
+                            </a>
+                        }
+                    </div>
                 }
 
-                <!-- Price Range -->
-                <p class="fw-bold mb-1">Price Range</p>
-                <form method="get" asp-action="Index">
-                    <input type="hidden" name="pageCategory" value="@pageCategory" />
-                    <input type="hidden" name="selectedMainCategory" value="@selMain" />
-                    <input type="hidden" name="selectedSubCategory" value="@selSub" />
-                    <input type="hidden" name="sortBy" value="@sortBy" />
-                    <select name="priceRange" onchange="this.form.submit()" class="form-select form-select-sm mb-3">
-                        @foreach (var opt in new[] {
-                                                ("all",       "All Prices"),
-                                                ("under500",  "Under ₹500"),
-                                                ("500-1000",  "₹500 - ₹1,000"),
-                                                ("1000-1500", "₹1,000 - ₹1,500"),
-                                                ("1500-2000", "₹1,500 - ₹2,000"),
-                                                ("above2000", "Above ₹2,000")
-                                                })
-                        {
-                            if (priceRange == opt.Item1)
-                            {
-                                <option value="@opt.Item1" selected>@opt.Item2</option>
-                            }
-                            else
-                            {
-                                <option value="@opt.Item1">@opt.Item2</option>
-                            }
-                        }
-                    </select>
-                </form>
+                <div class="filter-label">Price Range</div>
+                <select id="priceRangeSelect" class="form-select form-select-sm border-0 bg-light rounded-2 py-2 px-3 shadow-none text-secondary" onchange="applyFilters()">
+                    <option value="all" selected="@(ViewBag.PriceRange?.ToString() == "all")">All Prices</option>
+                    <option value="under500" selected="@(ViewBag.PriceRange?.ToString() == "under500")">Under ₹500</option>
+                    <option value="500-1000" selected="@(ViewBag.PriceRange?.ToString() == "500-1000")">₹500 - ₹1000</option>
+                    <option value="1000-1500" selected="@(ViewBag.PriceRange?.ToString() == "1000-1500")">₹1000 - ₹1500</option>
+                    <option value="1500-2000" selected="@(ViewBag.PriceRange?.ToString() == "1500-2000")">₹1500 - ₹2000</option>
+                    <option value="above2000" selected="@(ViewBag.PriceRange?.ToString() == "above2000")">Above ₹2000</option>
+                </select>
 
-                <!-- Sort By -->
-                <p class="fw-bold mb-1">Sort By</p>
-                <form method="get" asp-action="Index">
-                    <input type="hidden" name="pageCategory" value="@pageCategory" />
-                    <input type="hidden" name="selectedMainCategory" value="@selMain" />
-                    <input type="hidden" name="selectedSubCategory" value="@selSub" />
-                    <input type="hidden" name="priceRange" value="@priceRange" />
-                    <select name="sortBy" onchange="this.form.submit()" class="form-select form-select-sm">
-                        @foreach (var opt in new[] {
-                                                ("name",       "Name"),
-                                                ("price-low",  "Price: Low to High"),
-                                                ("price-high", "Price: High to Low"),
-                                                ("rating",     "Rating")
-                                                })
-                        {
-                            if (sortBy == opt.Item1)
-                            {
-                                <option value="@opt.Item1" selected>@opt.Item2</option>
-                            }
-                            else
-                            {
-                                <option value="@opt.Item1">@opt.Item2</option>
-                            }
-                        }
-                    </select>
-                </form>
-
+                <div class="filter-label">Sort By</div>
+                <select id="sortBySelect" class="form-select form-select-sm border-0 bg-light rounded-2 py-2 px-3 shadow-none text-secondary" onchange="applyFilters()">
+                    <option value="name" selected="@(ViewBag.SortBy?.ToString() == "name")">Name</option>
+                    <option value="priceLow" selected="@(ViewBag.SortBy?.ToString() == "priceLow")">Price: Low to High</option>
+                    <option value="priceHigh" selected="@(ViewBag.SortBy?.ToString() == "priceHigh")">Price: High to Low</option>
+                    <option value="rating" selected="@(ViewBag.SortBy?.ToString() == "rating")">Rating</option>
+                </select>
             </div>
         </div>
 
-        <!-- PRODUCTS -->
+        <!-- PRODUCTS GRID -->
         <div class="col-md-9">
-            <h3 class="mb-4">Products (@products.Count)</h3>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold mb-0 text-dark">Products <span class="text-secondary fw-normal fs-5">(@products.Count)</span></h4>
+                <div class="d-flex gap-2">
+                    <div class="btn btn-sm d-flex align-items-center justify-content-center rounded" style="background-color: #e2154c; color: white; width: 32px; height: 32px;">
+                        <i class="bi bi-grid-fill"></i>
+                    </div>
+                    <div class="btn btn-sm d-flex align-items-center justify-content-center rounded bg-white border" style="color: #4a5568; width: 32px; height: 32px;">
+                        <i class="bi bi-list"></i>
+                    </div>
+                </div>
+            </div>
 
             @if (products.Any())
             {
@@ -148,82 +108,139 @@
                     @foreach (var product in products)
                     {
                         var pid = product.Id;
+                        // PUT THE URL OF THE IMAGE YOU WANT TO SHOW WHEN NO IMAGE IS AVAILABLE HERE
+                        var defaultImage = "https://placehold.co/400x500?text=Your+Image+Here"; // <-- Edit this URL
+                        
                         var imgSrc = product.Images != null && product.Images.Count > 0
-                        ? $"http://localhost:4000{product.Images[0]}"
-                        : "https://placehold.co/400x500?text=No+Image";
+                        ? product.Images[0]
+                        : defaultImage;
+                        
+                        var actionText = product.Title.ToLower().Contains("saree") ? "Add" : "Select";
 
                         <div class="col-md-4">
-                            <div class="product-card position-relative">
-
-                                <!-- Wishlist -->
-                                <button onclick="toggleWishlist('@pid')"
-                                        id="wish-@pid"
-                                        class="btn btn-sm position-absolute top-0 end-0 m-2 rounded-circle bg-white border"
-                                        title="Wishlist">
-                                    ♡
-                                </button>
-
-                                <!-- Image -->
-                                <a href="/Product/Details/@pid">
-                                    <img src="@imgSrc"
-                                         alt="@product.Title"
-                                         onerror="this.src='https://placehold.co/400x500?text=No+Image'" />
+                            <div class="product-card">
+                                <a href="/Home/AddToWishlist/@pid" class="wishlist-btn text-dark text-decoration-none d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-heart"></i>
                                 </a>
-
-                                <!-- Title -->
-                                <div class="product-title">
-                                    <a href="/Product/Details/@pid" class="text-decoration-none text-dark">
-                                        @product.Title
+                                
+                                <a href="/Home/Details/@pid">
+                                    <!-- Replace this onerror path if you have a local image in wwwroot/images/ -->
+                                    <img src="@imgSrc" alt="@product.Title" onerror="this.src='@defaultImage'" />
+                                </a>
+                                
+                                <div class="product-title">@product.Title</div>
+                                <div class="product-subtitle">@product.MainCategory - @product.Category</div>
+                                
+                                <div class="product-rating d-flex align-items-center gap-2 mb-2" data-product-id="@pid">
+                                    <div class="stars d-flex cursor-pointer text-warning">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            var starClass = (i <= Math.Round(product.AverageRating)) ? "bi-star-fill" : "bi-star text-secondary";
+                                            <i class="bi @starClass star-rate" data-value="@i" style="cursor: pointer; transition: transform 0.1s;"></i>
+                                        }
+                                    </div>
+                                    <span class="small text-secondary fw-medium avg-text">(@product.AverageRating)</span>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="price-tag">₹@product.Price</div>
+                                    <a href="/Home/AddToCart/@pid" class="btn-select-add text-decoration-none">
+                                        <i class="bi bi-cart3"></i> @actionText
                                     </a>
                                 </div>
-
-                                <!-- Category -->
-                                <small class="text-muted px-2">@product.MainCategory - @product.SubCategory</small>
-
-                                <!-- Stars -->
-                                <div class="px-2 my-1">
-                                    @for (int i = 0; i < 5; i++)
-                                    {
-                                        <span class="@(i < Math.Floor(product.AverageRating) ? "text-warning" : "text-secondary")">★</span>
-                                    }
-                                    <small class="text-muted">(@product.NumRatings)</small>
-                                </div>
-
-                                <!-- Price + Cart -->
-                                <div class="d-flex align-items-center justify-content-between px-2 pb-2">
-                                    <strong>₹@product.Price</strong>
-                                    @if (product.Stock > 0)
-                                    {
-                                        <a href="/Cart/Add/@pid" class="btn btn-danger btn-sm">
-                                            🛒 Add
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-danger-subtle text-danger border border-danger">Out of Stock</span>
-                                    }
-                                </div>
-
                             </div>
                         </div>
                     }
                 </div>
             }
-            else
-            {
-                <p class="text-muted">No products found matching your criteria.</p>
-            }
         </div>
-
     </div>
 </div>
 
 @section Scripts {
     <script>
-        function toggleWishlist(id) {
-            const btn = document.getElementById('wish-' + id);
-            btn.textContent = btn.textContent.trim() === '♡' ? '♥' : '♡';
-            btn.classList.toggle('text-danger');
+        document.querySelectorAll('.wishlist-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('bi-heart')) {
+                    icon.classList.replace('bi-heart', 'bi-heart-fill');
+                    icon.classList.add('text-danger');
+                } else {
+                    icon.classList.replace('bi-heart-fill', 'bi-heart');
+                    icon.classList.remove('text-danger');
+                }
+            });
+        });
+
+        // Star Rating Logic
+        document.querySelectorAll('.star-rate').forEach(star => {
+            star.addEventListener('mouseover', function() {
+                let val = this.getAttribute('data-value');
+                this.closest('.stars').querySelectorAll('.star-rate').forEach(s => {
+                    if(s.getAttribute('data-value') <= val) s.classList.add('text-warning');
+                });
+            });
+
+            star.addEventListener('mouseout', function() {
+                let container = this.closest('.product-rating');
+                let avg = Math.round(parseFloat(container.querySelector('.avg-text').innerText.replace('(', '').replace(')', '')));
+                container.querySelectorAll('.star-rate').forEach(s => {
+                    let v = s.getAttribute('data-value');
+                    if(v > avg) s.classList.remove('text-warning');
+                });
+            });
+
+            star.addEventListener('click', function() {
+                let container = this.closest('.product-rating');
+                let productId = container.getAttribute('data-product-id');
+                let rating = this.getAttribute('data-value');
+                let avgTextElem = container.querySelector('.avg-text');
+
+                fetch('/Home/RateProduct', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `id=${productId}&rating=${rating}`
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        container.querySelectorAll('.star-rate').forEach(s => {
+                            let v = s.getAttribute('data-value');
+                            if(v <= Math.round(data.newAvg)) {
+                               s.classList.replace('bi-star', 'bi-star-fill');
+                               s.classList.add('text-warning');
+                               s.classList.remove('text-secondary');
+                            } else {
+                               s.classList.replace('bi-star-fill', 'bi-star');
+                               s.classList.remove('text-warning');
+                               s.classList.add('text-secondary');
+                            }
+                        });
+                        avgTextElem.innerText = `(${data.newAvg})`;
+                    }
+                });
+            });
+        });
+
+        // Filtering Logic
+        function applyFilters() {
+            const price = document.getElementById('priceRangeSelect').value;
+            const sort = document.getElementById('sortBySelect').value;
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (price && price !== 'all') {
+                urlParams.set('priceRange', price);
+            } else {
+                urlParams.delete('priceRange');
+            }
+
+            if (sort && sort !== 'name') {
+                urlParams.set('sortBy', sort);
+            } else {
+                urlParams.delete('sortBy');
+            }
+            
+            window.location.search = urlParams.toString();
         }
     </script>
 }

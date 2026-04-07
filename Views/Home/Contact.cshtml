@@ -1,1 +1,151 @@
-﻿
+@model ContactViewModel
+
+@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<div class="container-fluid px-5 py-4">
+    <!-- Back to store link -->
+    <a href="/" class="text-secondary text-decoration-none mb-4 d-inline-block d-flex align-items-center gap-2 w-auto">
+        <i class="bi bi-arrow-left"></i> Back to Store
+    </a>
+
+    <!-- Header Card -->
+    <div class="card border-0 shadow-sm rounded-4 mb-5 mx-auto text-center py-5" style="max-width: 1000px;">
+        <h1 class="fw-bold" style="font-size: 2.5rem; color: #1a202c;">
+            Get in <span style="color: #e2154c;">Touch</span>
+        </h1>
+        <p class="text-secondary mt-3 mx-auto mb-0" style="max-width: 600px; font-size: 1.05rem;">
+            We'd love to hear from you! Send us a message and we'll respond as soon as possible.
+        </p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="row mx-auto justify-content-center" style="max-width: 1000px;">
+        <!-- Left: Form -->
+        <div class="col-md-7 ps-0 pe-md-3 mb-4 mb-md-0">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 h-100">
+                <h4 class="fw-bold mb-4 d-flex align-items-center gap-2 fs-5" style="color: #1a202c;">
+                    <i class="bi bi-chat-text text-danger"></i> Send us a Message
+                </h4>
+                
+                @if (TempData["ContactSuccess"] != null)
+                {
+                    <div class="alert alert-success border-0 rounded-3 shadow-sm mb-4 d-flex align-items-center gap-2" role="alert" style="background-color: #f0fdf4; color: #166534;">
+                        <i class="bi bi-check-circle-fill"></i>
+                        @TempData["ContactSuccess"]
+                    </div>
+                }
+
+                <form asp-action="Contact" method="post">
+                    <div class="mb-4">
+                        <label asp-for="Name" class="form-label fw-semibold" style="font-size: 0.85rem; color: #1a202c;">Full Name <span class="text-danger">*</span></label>
+                        <input asp-for="Name" class="form-control bg-white rounded-3 py-2 border text-secondary" placeholder="Enter your full name" style="font-size: 0.9rem;">
+                        <span asp-validation-for="Name" class="text-danger mt-1 d-block" style="font-size: 0.8rem;"></span>
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="Email" class="form-label fw-semibold" style="font-size: 0.85rem; color: #1a202c;">Email Address <span class="text-danger">*</span></label>
+                        <input asp-for="Email" class="form-control bg-white rounded-3 py-2 border text-secondary" placeholder="Enter your email address" style="font-size: 0.9rem;">
+                        <span asp-validation-for="Email" class="text-danger mt-1 d-block" style="font-size: 0.8rem;"></span>
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="Subject" class="form-label fw-semibold" style="font-size: 0.85rem; color: #1a202c;">Subject <span class="text-danger">*</span></label>
+                        <input asp-for="Subject" class="form-control bg-white rounded-3 py-2 border text-secondary" placeholder="What is this about?" style="font-size: 0.9rem;">
+                        <span asp-validation-for="Subject" class="text-danger mt-1 d-block" style="font-size: 0.8rem;"></span>
+                    </div>
+                    <div class="mb-5">
+                        <label asp-for="Message" class="form-label fw-semibold" style="font-size: 0.85rem; color: #1a202c;">Message <span class="text-danger">*</span></label>
+                        <textarea asp-for="Message" class="form-control bg-white rounded-3 py-2 border text-secondary" rows="5" placeholder="Tell us more about your inquiry..." style="font-size: 0.9rem;"></textarea>
+                        <span asp-validation-for="Message" class="text-danger mt-1 d-block" style="font-size: 0.8rem;"></span>
+                    </div>
+                    <button type="submit" class="btn btn-danger w-100 rounded-3 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2" style="background-color: #e2154c; font-size: 0.95rem;">
+                        <i class="bi bi-send"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right: Info Panels -->
+        <div class="col-md-5 pe-0 ps-md-3 d-flex flex-column gap-4">
+            <!-- Contact Info -->
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h6 class="fw-bold mb-4" style="color: #1a202c;">Contact Information</h6>
+                
+                <div class="d-flex align-items-start gap-3 mb-4">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; background-color: #fb7185; color: white;">
+                        <i class="bi bi-envelope"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold" style="color: #1a202c; font-size: 0.9rem;">Email</div>
+                        <div class="text-secondary" style="font-size: 0.85rem;">support@closet.com</div>
+                        <div class="text-secondary mt-1" style="font-size: 0.75rem;">We'll respond within 24 hours</div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start gap-3 mb-4">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; background-color: #22c55e; color: white;">
+                        <i class="bi bi-telephone"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold" style="color: #1a202c; font-size: 0.9rem;">Phone</div>
+                        <div class="text-secondary" style="font-size: 0.85rem;">+91 98765 43210</div>
+                        <div class="text-secondary mt-1" style="font-size: 0.75rem;">Mon-Fri 9AM-9PM IST</div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start gap-3">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; background-color: #3b82f6; color: white;">
+                        <i class="bi bi-geo-alt"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold" style="color: #1a202c; font-size: 0.9rem;">Address</div>
+                        <div class="text-secondary" style="font-size: 0.85rem; line-height: 1.4;">Dhamendra Road 5<br/>Rajkot Gujarat 360005<br/>India</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Hours -->
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h6 class="fw-bold mb-4 d-flex align-items-center gap-2" style="color: #1a202c;">
+                    <i class="bi bi-clock text-danger"></i> Store Business Hours
+                </h6>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-secondary" style="font-size: 0.85rem;">Monday - Friday</span>
+                    <span class="fw-bold" style="color: #1a202c; font-size: 0.85rem;">9:00 AM - 9:00 PM</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-secondary" style="font-size: 0.85rem;">Saturday</span>
+                    <span class="fw-bold" style="color: #1a202c; font-size: 0.85rem;">9:00 AM - 10:00 PM</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="text-secondary" style="font-size: 0.85rem;">Sunday</span>
+                    <span class="fw-bold" style="color: #1a202c; font-size: 0.85rem;">Closed</span>
+                </div>
+            </div>
+
+            <!-- Quick Help -->
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h6 class="fw-bold mb-4" style="color: #1a202c;">Quick Help</h6>
+                
+                <div class="mb-3">
+                    <div class="fw-bold mb-1" style="color: #1a202c; font-size: 0.85rem;">Order Issues?</div>
+                    <div class="text-secondary" style="font-size: 0.75rem; line-height: 1.4;">Check your order status in your account or contact us with your order number.</div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="fw-bold mb-1" style="color: #1a202c; font-size: 0.85rem;">Returns & Exchanges</div>
+                    <div class="text-secondary" style="font-size: 0.75rem; line-height: 1.4;">We offer 30-day returns on all items. See our return policy for details.</div>
+                </div>
+                
+                <div>
+                    <div class="fw-bold mb-1" style="color: #1a202c; font-size: 0.85rem;">Size Guide</div>
+                    <div class="text-secondary" style="font-size: 0.75rem; line-height: 1.4;">Need help with sizing? Size charts are available on Google. We follow Indian Size.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

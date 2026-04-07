@@ -1,0 +1,163 @@
+@{
+    ViewData["Title"] = "Select Delivery Address";
+    var cartItems = ViewBag.CartItems as List<Closet_ASP.NET.Models.Product> ?? new List<Product>();
+}
+
+<div class="container-fluid px-5 py-4" style="background-color: #fafbfc; min-height: 80vh;">
+    <!-- Back Link -->
+    <div class="mb-4">
+        <a href="/Home/Cart" class="text-secondary text-decoration-none d-flex align-items-center gap-2" style="font-size: 0.9rem;">
+            <i class="bi bi-arrow-left"></i> Back to Cart
+        </a>
+    </div>
+
+    <div class="row gx-5 justify-content-center mx-auto" style="max-width: 1300px;">
+        <!-- LEFT: Delivery Address Section -->
+        <div class="col-md-7 pe-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-5 h-100 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <h2 class="fw-bold fs-3 mb-0" style="color: #1a202c;">Select Delivery Address</h2>
+                </div>
+
+                <div class="mb-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0" style="color: #1a202c; font-size: 1.1rem;">Delivery Address</h5>
+                    <button class="btn btn-danger rounded-3 px-4 py-2 d-flex align-items-center gap-2 border-0" style="background-color: #e2154c; font-size: 0.9rem;" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                        <i class="bi bi-plus fs-5"></i> Add Address
+                    </button>
+                </div>
+
+                <div class="d-flex flex-column align-items-center justify-content-center text-center py-5 mt-4">
+                    <div class="mb-4" style="color: #cbd5e1;">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <p class="text-secondary mb-0" style="font-size: 0.95rem;">No addresses found. Please add a delivery address.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Order Summary -->
+        <div class="col-md-4 ps-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+                <h5 class="fw-bold mb-5" style="color: #1a202c; font-size: 1.1rem;">Order Summary</h5>
+
+                @{
+                    var subtotal = cartItems.Sum(i => i.Price * i.Quantity);
+                    var tax = subtotal * 0.18m;
+                    var total = subtotal + tax;
+                }
+
+                <div class="mb-5">
+                    @foreach (var item in cartItems)
+                    {
+                        <div class="d-flex justify-content-between mb-2">
+                            <div>
+                                <div class="fw-bold text-dark" style="font-size: 0.9rem;">@item.Title</div>
+                                <div class="text-secondary small">Size: One Size × @item.Quantity</div>
+                            </div>
+                            <div class="fw-bold text-dark" style="font-size: 0.9rem;">₹@(item.Price * item.Quantity)</div>
+                        </div>
+                    }
+                </div>
+
+                <div class="d-flex justify-content-between mb-3 text-secondary" style="font-size: 0.95rem;">
+                    <span>Subtotal</span>
+                    <span class="fw-semibold text-dark">₹@subtotal</span>
+                </div>
+                <div class="d-flex justify-content-between mb-4 pb-4 border-bottom text-secondary" style="font-size: 0.95rem;">
+                    <span>GST (18%)</span>
+                    <span class="fw-semibold text-dark">₹@Math.Round(tax)</span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-5">
+                    <span class="fw-bold text-dark fs-5">Total</span>
+                    <span class="fw-bold fs-5" style="color: #e2154c;">₹@Math.Round(total)</span>
+                </div>
+
+                <button class="btn btn-secondary w-100 rounded-3 py-3 fw-semibold mb-2 disabled" style="background-color: #cbd5e1; border: none; font-size: 0.95rem;">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Add New Address -->
+<div class="modal fade" id="addAddressModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header border-0 px-4 pt-4 pb-0">
+                <h5 class="modal-title fw-bold fs-4" style="color: #1a202c;">Add New Address</h5>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4 py-4">
+                <form id="addressForm">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold mb-2 small" style="color: #1a202c;">Full Name ^</label>
+                        <input type="text" class="form-control rounded-2 py-2 text-secondary px-3" placeholder="Enter full name" style="border-color: #e2e8f0; font-size: 0.9rem;">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold mb-2 small" style="color: #1a202c;">Address Line 1 *</label>
+                        <input type="text" class="form-control rounded-2 py-2 text-secondary px-3" placeholder="House/Flat No., Building Name, Street" style="border-color: #e2e8f0; font-size: 0.9rem;">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold mb-2 small" style="color: #1a202c;">Address Line 2</label>
+                        <input type="text" class="form-control rounded-2 py-2 text-secondary px-3" placeholder="Area, Landmark (Optional)" style="border-color: #e2e8f0; font-size: 0.9rem;">
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold mb-2 small" style="color: #1a202c;">City *</label>
+                            <input type="text" class="form-control rounded-2 py-2 text-secondary px-3" placeholder="City" style="border-color: #e2e8f0; font-size: 0.9rem;">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-semibold mb-2 small" style="color: #1a202c;">State *</label>
+                            <input type="text" class="form-control rounded-2 py-2 text-secondary px-3" placeholder="State" style="border-color: #e2e8f0; font-size: 0.9rem;">
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold mb-2 small" style="color: #1a202c;">Pin Code *</label>
+                            <input type="text" class="form-control rounded-2 py-2 text-secondary px-3" placeholder="Pin Code" style="border-color: #e2e8f0; font-size: 0.9rem;">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-semibold mb-2 small" style="color: #1a202c;">Phone</label>
+                            <input type="text" class="form-control rounded-2 py-2 text-secondary px-3" placeholder="Phone Number" style="border-color: #e2e8f0; font-size: 0.9rem;">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-check d-flex align-items-center gap-2">
+                            <input class="form-check-input mt-0 shadow-none border" type="checkbox" id="defaultAddress" style="border-color: #e2e8f0;">
+                            <label class="form-check-label text-secondary" for="defaultAddress" style="font-size: 0.85rem;">
+                                Set as default address
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 mt-5">
+                        <button type="button" class="btn btn-outline-secondary w-100 rounded-3 py-2 fw-semibold" data-bs-dismiss="modal" style="border-color: #e2e8f0; color: #4a5568; font-size: 0.9rem;">Cancel</button>
+                        <button type="submit" class="btn btn-danger w-100 rounded-3 py-2 fw-semibold border-0" style="background-color: #e2154c; font-size: 0.9rem;">Add Address</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus {
+        border-color: #e2154c;
+        box-shadow: none;
+    }
+    
+    .modal-backdrop.show {
+        opacity: 0.5;
+        background-color: #1a202c;
+    }
+</style>

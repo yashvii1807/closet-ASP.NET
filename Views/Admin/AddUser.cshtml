@@ -1,0 +1,81 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["ActivePage"] = "Users";
+}
+
+<div class="p-4 p-md-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold mb-1">Add New User</h1>
+            <p class="text-secondary mb-0">Create a new account for your team or customers</p>
+        </div>
+        <a href="/Admin/Users" class="btn btn-light bg-white border-0 shadow-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+            <i class="bi bi-x fs-4"></i>
+        </a>
+    </div>
+
+    <!-- User Form Card -->
+    <div class="card border-0 shadow-sm rounded-4 p-5 bg-white mx-auto" style="max-width: 800px;">
+        <form action="/Admin/AddUser" method="post">
+            <!-- Circular Photo Upload -->
+            <div class="d-flex flex-column align-items-center mb-5">
+                <div class="photo-upload-circle rounded-circle border-2 border-dashed d-flex align-items-center justify-content-center flex-column" 
+                     style="width: 120px; height: 120px; border-color: #cbd5e1; cursor: pointer; transition: all 0.2s; background-color: #fbfbfc;">
+                    <i class="bi bi-upload text-secondary fs-4 mb-1"></i>
+                    <span class="text-secondary fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">PHOTO</span>
+                </div>
+                <p class="text-secondary mt-3 mb-0" style="font-size: 0.8rem;">Allowed *.jpeg, *.jpg, *.png, *.gif</p>
+                <input type="file" id="userPhotoInput" hidden accept="image/*">
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold mb-2" style="font-size: 0.9rem; color: #1a202c;">Full Name *</label>
+                    <input type="text" name="Name" class="form-control rounded-3 py-2 px-3 border shadow-none" placeholder="Enter full name" style="border-color: #e2e8f0; font-size: 0.95rem;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold mb-2" style="font-size: 0.9rem; color: #1a202c;">Email *</label>
+                    <input type="email" name="Email" class="form-control rounded-3 py-2 px-3 border shadow-none" placeholder="Enter email address" style="border-color: #e2e8f0; font-size: 0.95rem;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold mb-2" style="font-size: 0.9rem; color: #1a202c;">Phone</label>
+                    <input type="text" name="Contact" class="form-control rounded-3 py-2 px-3 border shadow-none" placeholder="Enter phone number" style="border-color: #e2e8f0; font-size: 0.95rem;">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold mb-2" style="font-size: 0.9rem; color: #1a202c;">Role *</label>
+                    <select name="Role" class="form-select rounded-3 py-2 px-3 border shadow-none" style="border-color: #e2e8f0; font-size: 0.95rem;">
+                        <option value="User" selected>User</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
+                <div class="col-12 mt-4">
+                    <label class="form-label fw-semibold mb-2" style="font-size: 0.9rem; color: #1a202c;">Password *</label>
+                    <input type="password" name="Password" class="form-control rounded-3 py-2 px-3 border shadow-none" placeholder="Enter password" style="border-color: #e2e8f0; font-size: 0.95rem;">
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end align-items-center gap-4 mt-5 pt-3">
+                <a href="/Admin/Users" class="btn text-secondary fw-semibold p-0 border-0 bg-transparent text-decoration-none" style="font-size: 0.95rem;">Cancel</a>
+                <button type="submit" class="btn btn-danger rounded-3 px-5 py-2 fw-semibold shadow-sm border-0" style="background-color: #e22e51; font-size: 1rem;">Save User</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .form-control:focus, .form-select:focus {
+        border-color: #e22e51 !important;
+        box-shadow: none !important;
+    }
+    
+    .photo-upload-circle:hover {
+        border-color: #e22e51 !important;
+        background-color: #fff1f2 !important;
+    }
+</style>
+
+<script>
+    document.querySelector('.photo-upload-circle').addEventListener('click', () => {
+        document.querySelector('#userPhotoInput').click();
+    });
+</script>

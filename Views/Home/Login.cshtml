@@ -1,4 +1,4 @@
-﻿@*
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
@@ -93,31 +93,55 @@
 
         <!-- RIGHT SIDE -->
         <div class="right-panel">
-            <h3>Sign in to Closet</h3>
+            <div class="d-flex mb-4 gap-2">
+                <button type="button" class="btn btn-danger flex-fill active px-3 rounded-pill" id="btnUser" onclick="switchRole('User')" style="font-weight: 600;">User Login</button>
+                <button type="button" class="btn btn-outline-dark flex-fill px-3 rounded-pill" id="btnAdmin" onclick="switchRole('Admin')" style="font-weight: 600;">Admin Login</button>
+            </div>
+            
+            <h3 id="formTitle">Sign in as User</h3>
             <p>
                 New here?
                 <a href="Register" class="text-danger">Create an account</a>
             </p>
-            <form>
+            <form action="/Home/Login" method="post">
+                <input type="hidden" name="role" id="roleInput" value="User" />
                 <div class="mb-3 mt-4">
                     <label>Email address</label>
-                    <input type="email" class="form-control" placeholder="you@example.com" />
+                    <input type="email" name="email" class="form-control" placeholder="you@example.com" required />
                 </div>
 
                 <div class="mb-3">
                     <label>Password</label>
-                    <input type="password" class="form-control" placeholder="Enter your password" />
+                    <input type="password" name="password" class="form-control" placeholder="Enter your password" required />
                 </div>
 
                 <div class="mb-3">
                     <small>Forgot password?</small>
                 </div>
 
-                <button type="submit" class="btn-login">Sign in</button>
+                <button type="submit" class="btn-login" id="submitBtn">Sign in as User</button>
             </form>
         </div>
 
     </div>
 
+    <script>
+        function switchRole(role) {
+            document.getElementById('roleInput').value = role;
+            if (role === 'Admin') {
+                document.getElementById('btnAdmin').classList.replace('btn-outline-dark', 'btn-dark');
+                document.getElementById('btnUser').classList.replace('btn-danger', 'btn-outline-danger');
+                document.getElementById('formTitle').innerText = 'Sign in as Admin';
+                document.getElementById('submitBtn').innerText = 'Sign in as Admin';
+                document.getElementById('submitBtn').style.backgroundColor = '#212529';
+            } else {
+                document.getElementById('btnUser').classList.replace('btn-outline-danger', 'btn-danger');
+                document.getElementById('btnAdmin').classList.replace('btn-dark', 'btn-outline-dark');
+                document.getElementById('formTitle').innerText = 'Sign in as User';
+                document.getElementById('submitBtn').innerText = 'Sign in as User';
+                document.getElementById('submitBtn').style.backgroundColor = '#e91e63';
+            }
+        }
+    </script>
 </body>
 </html>
